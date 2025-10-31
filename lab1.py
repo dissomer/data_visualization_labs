@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 def function_plots():
     x_y = np.linspace(-2.5, 2.5, 1000)
     y = 7 * np.sin(np.pi * x_y) - np.cos(3 * np.pi * x_y) * np.sin(np.pi * x_y)
-
     x_z = np.linspace(-4.0, 4.0, 1200)
     z = np.where(
         x_z <= 0,
@@ -83,7 +82,6 @@ def second_order_surface(a=2.0, b=3.0, c=1.0):
     X, Y = np.meshgrid(x, y)
     inside = (X ** 2) / (a ** 2) + (Y ** 2) / (b ** 2)
     Zpos = c * np.sqrt(inside)
-    Zneg = -Zpos
 
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111, projection='3d')
@@ -98,37 +96,69 @@ def second_order_surface(a=2.0, b=3.0, c=1.0):
 
 
 def bar_chart():
-    import numpy as np
-    import matplotlib.pyplot as plt
-
     countries = ['USA', 'Germany', 'France', 'Italy', 'USSR']
     years = np.array([1900, 1913, 1929, 1938, 1950, 1960, 1970, 1980, 1990, 2000])
 
     data = {
-        'USA':     [43, 56, 69, 76.5, 93.5, 105, 128.5, 146, 157.5, 175],
+        'USA': [43, 56, 69, 76.5, 93.5, 105, 128.5, 146, 157.5, 175],
         'Germany': [16, 19, 20, 21.5, 23, 29, 37, 40.5, 46.5, 52.5],
-        'France':  [21.5, 22, 22.5, 23, 23.5, 29.5, 47, 53, 65, 76.5],
-        'Italy':   [13.5, 14.5, 16, 17, 18.5, 30.5, 42, 44.5, 49, 56],
-        'USSR':    [37, 50.5, 58.8, 63, 75, 81.5, 87.5, 98, 120, 100]
+        'France': [21.5, 22, 22.5, 23, 23.5, 29.5, 47, 53, 65, 76.5],
+        'Italy': [13.5, 14.5, 16, 17, 18.5, 30.5, 42, 44.5, 49, 56],
+        'USSR': [37, 50.5, 58.8, 63, 75, 81.5, 87.5, 98, 120, 100]
     }
 
     plt.figure(figsize=(13, 7))
+    ax1 = plt.gca()
     bar_width = 0.10
     x = np.arange(len(years))
 
+    default_colors = []
+
     for i, country in enumerate(countries):
         offset = (i - len(countries) / 2) * bar_width + bar_width / 2
-        plt.bar(x + offset, data[country], width=bar_width, label=country)
+        bar_container = ax1.bar(x + offset, data[country], width=bar_width, label=country)
+
+        default_colors.append(bar_container[0].get_facecolor())
 
         for xi, yi in zip(x + offset, data[country]):
-            plt.text(xi, yi + 2, f'{yi}', ha='center', va='bottom', fontsize=8, rotation=90)
+            ax1.text(xi, yi + 2, f'{yi}', ha='center', va='bottom', fontsize=8, rotation=90)
 
-    plt.title('5. Global Agricultural Production (Added Value, Billion $)', fontsize=13)
+    plt.title('5.1. 2D Global agricultural production', fontsize=13)
     plt.xlabel('Year')
-    plt.ylabel('Billion Dollars (2000 prices)')
+    plt.ylabel('Billion Dollars')
     plt.xticks(x, years)
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.legend(title='Country')
+    plt.tight_layout()
+    plt.show()
+
+    fig = plt.figure(figsize=(10, 8))
+    ax2 = fig.add_subplot(111, projection='3d')
+
+    dx = 0.8
+    dy = 0.8
+
+    for i, country in enumerate(countries):
+        xpos = np.arange(len(years))
+        ypos = np.full(len(years), i)
+        zpos = np.zeros(len(years))
+        dz = data[country]
+
+        ax2.bar3d(xpos, ypos, zpos, dx, dy, dz,
+                  color=default_colors[i],
+                  shade=True,
+                  label=country)
+
+    ax2.set_title('5.2. 3D Global agricultural Production (Added Value, Billion $)', fontsize=13)
+    ax2.set_xlabel('Year')
+    ax2.set_ylabel('Country')
+    ax2.set_zlabel('Billion Dollars')
+
+    ax2.set_xticks(np.arange(len(years)) + dx / 2)
+    ax2.set_xticklabels(years)
+    ax2.set_yticks(np.arange(len(countries)) + dy / 2)
+    ax2.set_yticklabels(countries)
+    ax2.legend(loc='best')
     plt.tight_layout()
     plt.show()
 
