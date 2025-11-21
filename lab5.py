@@ -12,7 +12,7 @@ def is_hidden_dir(d):
     if sys.platform.startswith('win'):
         try:
             p = subprocess.check_output(['attrib', d], shell=True)
-            p = p.decode('cp1251', errors='replace')  #
+            p = p.decode('cp1251', errors='replace')  
             return 'H' in p[:12]
         except Exception:
             return False
