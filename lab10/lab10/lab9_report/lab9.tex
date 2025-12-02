@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\title{Laboratory work 9: Dimension reduction with SVD}
+\author{Olha Makovlieva, IKM-M225d}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Tasks}
+For the corresponding dataset, reduce the dimensionality of the data using PCA and SVD.
+
+\begin{enumerate}
+    \item Using \textbf{PCA} to visualize data in two- and three-dimensional (\textbf{2D and 3D}) spaces.
+    \item Calculate \textbf{SVD} of your dataset, plot the dependence of the eigenvalues of the matrix on their number. Before plotting, arrange the eigenvalues in descending order.
+    \item Determine the smallest value of the space size $d$ for which the following relation is satisfied:
+    $$
+    \frac{\sum_{i=0}^{d} \lambda_i}{\sum_{i=0}^{n} \lambda_i} \geq 0.8,
+    $$
+    where $\lambda_i$ are the eigenvalues of the matrix, $n$ is the total number of eigenvalues, and 0.8 is the level of data significance.
+    \item Set $\lambda_i$ to zero for $d \leq i \leq n$. Perform the reverse transformation and compare the obtained data with the original.
+    \item Set $d = 2$ (for 2D) and $d = 3$ (for 3D), perform and plot the first $d$ columns of reconstructed data. Compare the graph with the one obtained in step 1.
+\end{enumerate}
+
+\section*{Results}
+
+\subsection*{PCA Visualization}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{pca_visualization.png} 
+    \caption{PCA 2D and 3D Visualization}
+    \label{fig:pca_viz}
+\end{figure}
+
+In the \textbf{2D PCA plot}, the data points are displayed based on the two directions of maximum variance, allowing visual inspection of whether the classes form distinguishable patterns or clusters.  
+The \textbf{3D PCA plot} extends this by adding a third component, capturing more variance and potentially revealing structure not visible in two dimensions.  
+The color coding reflects the class labels, allowing comparison of how well-separated the groups appear in the reduced-dimensional space.
+
+\subsection*{Eigenvalue Analysis}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{eigenvalues_plot.png}
+    \caption{Eigenvalues}
+    \label{fig:eigenvalues}
+\end{figure}
+
+The eigenvalue graph displays the sorted squared singular values obtained from the Singular Value Decomposition of the centered dataset.  
+Each eigenvalue represents the amount of variance captured by its corresponding principal component.  
+Larger eigenvalues indicate components that explain more variability in the data.  
+The downward-sloping curve helps identify how quickly the variance decreases and whether there is a natural cutoff point where additional components contribute very little to the total information.
+
+\subsection*{PCA vs. SVD Comparison}
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.9\textwidth}
+        \includegraphics[width=\textwidth]{pca_svd_2d_comparison.png}
+        \caption{PCA 2D vs SVD 2D}
+        \label{fig:2d_comparison}
+    \end{subfigure}
+    \vspace{0.5cm}
+    \begin{subfigure}[b]{0.9\textwidth}
+        \includegraphics[width=\textwidth]{pca_svd_3d_comparison.png}
+        \caption{PCA 3D vs SVD 3D}
+        \label{fig:3d_comparison}
+    \end{subfigure}
+    \caption{Comparison of PCA and SVD Low-Dimensional Representations}
+    \label{fig:pca_svd_comparison}
+\end{figure}
+
+The comparison plots demonstrate that \textbf{PCA and SVD yield equivalent low-dimensional representations} when applied to centered data.  
+The 2D and 3D scatterplots for PCA and SVD show nearly identical spatial distributions of points, confirming the mathematical equivalence of the two methods for dimensionality reduction.  
+Any visual differences between the plots are due only to rotation or scaling conventions, but the underlying relationships between the data points remain the same.
+
+\subsection*{Optimal Dimensionality}
+
+Optimal $d$ by mean squared error (MSE) is 3, with MSE = 0.0316.  
+For each possible dimension $d$, the algorithm reconstructs the data using only the first $d$ singular values and computes the \textbf{mean squared reconstruction error}.  
+The smallest value of $d$ that keeps the error below the chosen threshold is reported as the optimal dimensionality.  
+This result indicates how many components are sufficient to preserve the essential structure of the dataset.
+
+\end{document}
